@@ -2,13 +2,17 @@ const inputBtn = document.getElementById("input-btn")
 const inputEl = document.getElementById("input-el")
 let myLeads =[]
 const ulEl = document.getElementById("ul-el")
-
+const deleteBtn = document.getElementById("delete-btn")
 let LeadsFromLocalStorage = JSON.parse(localStorage.getItem("myLeads"))
 if (LeadsFromLocalStorage){
     myLeads = LeadsFromLocalStorage
     renderLeads()
 }
-
+deleteBtn.addEventListener("dblclick",function(){
+    localStorage.clear()
+    myLeads = []
+    renderLeads()
+})
 // save input leads into myleads array
 inputBtn.addEventListener("click", function(){
     
