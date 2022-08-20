@@ -3,15 +3,17 @@ const inputEl = document.getElementById("input-el")
 let myLeads =[]
 const ulEl = document.getElementById("ul-el")
 const deleteBtn = document.getElementById("delete-btn")
+const tabBtn = document.getElementById("tab-btn")
+// get leads from local storage back into array form
 let LeadsFromLocalStorage = JSON.parse(localStorage.getItem("myLeads"))
 if (LeadsFromLocalStorage){
     myLeads = LeadsFromLocalStorage
-    renderLeads()
+    render(myLeads)
 }
 deleteBtn.addEventListener("dblclick",function(){
     localStorage.clear()
     myLeads = []
-    renderLeads()
+    render(myLeads)
 })
 // save input leads into myleads array
 inputBtn.addEventListener("click", function(){
@@ -20,17 +22,17 @@ inputBtn.addEventListener("click", function(){
     inputEl.value =""
     // store leads in localStorage
     localStorage.setItem("myLeads", JSON.stringify(myLeads))
-    renderLeads()
+    render(myLeads)
 })
 
 // store leads into listItems variable
-function renderLeads(){
+function render(leads){
     let listItems =""
-    for (let i =0; i < myLeads.length; i++){
+    for (let i =0; i < leads.length; i++){
         listItems += `
             <li>
-                <a target = 'blank' href = '${myLeads[i]}'>
-                    ${myLeads[i]}
+                <a target = 'blank' href = '${leads[i]}'>
+                    ${leads[i]}
                 </a>
             <li>
             `
