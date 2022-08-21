@@ -1,49 +1,48 @@
-const inputBtn = document.getElementById("input-btn")
+let myLeads = []
 const inputEl = document.getElementById("input-el")
-let myLeads =[]
+const inputBtn = document.getElementById("input-btn")
 const ulEl = document.getElementById("ul-el")
 const deleteBtn = document.getElementById("delete-btn")
+const leadsFromLocalStorage = JSON.parse( localStorage.getItem("myLeads") )
 const tabBtn = document.getElementById("tab-btn")
-// get leads from local storage back into array form
-let LeadsFromLocalStorage = JSON.parse(localStorage.getItem("myLeads"))
-if (LeadsFromLocalStorage){
-    myLeads = LeadsFromLocalStorage
+
+if (leadsFromLocalStorage) {
+    myLeads = leadsFromLocalStorage
     render(myLeads)
 }
-deleteBtn.addEventListener("dblclick",function(){
+
+tabBtn.addEventListener("click", function(){    
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+        myLeads.push(tabs[0].url)
+        localStorage.setItem("myLeads", JSON.stringify(myLeads) )
+        render(myLeads)
+    })
+})
+
+function render(leads) {
+    let listItems = ""
+    for (let i = 0; i < leads.length; i++) {
+        listItems += `
+            <li>
+                <a target='_blank' href='${leads[i]}'>
+                    ${leads[i]}
+                </a>
+            </li>
+        `
+    }
+    ulEl.innerHTML = listItems
+}
+
+deleteBtn.addEventListener("dblclick", function() {
     localStorage.clear()
     myLeads = []
     render(myLeads)
 })
-// save input leads into myleads array
-inputBtn.addEventListener("click", function(){
-    
+
+inputBtn.addEventListener("click", function() {
     myLeads.push(inputEl.value)
-    inputEl.value =""
-    // store leads in localStorage
-    localStorage.setItem("myLeads", JSON.stringify(myLeads))
+    inputEl.value = ""
+    localStorage.setItem("myLeads", JSON.stringify(myLeads) )
     render(myLeads)
 })
-
-// store leads into listItems variable
-function render(leads){
-    let listItems =""
-    for (let i =0; i < leads.length; i++){
-        listItems += `
-            <li>
-                <a target = 'blank' href = '${leads[i]}'>
-                    ${leads[i]}
-                </a>
-            <li>
-            `
-        
-        
-        
-    }
-// display listItems onto page by making them the content for the unordered list
-    ulEl.innerHTML = listItems
-
-
-
-}
 
